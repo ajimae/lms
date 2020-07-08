@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package qlik.connect;
+
+service UserService {
+  rpc GetUser (Id) returns (User) {}
+}
+
+message User {
+  string name = 1;
+  string age = 2;
+  string address = 3;
+}
+
+message Id {
+  string id = 1;
+}
+
+message Empty {}

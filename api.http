@@ -1,0 +1,41 @@
+### get an order
+GET http://localhost:6565/order/5ef9334f22b1265ad25d0494 HTTP/1.1
+Content-Type: application/json
+
+### post an order
+POST http://localhost:6565/orders HTTP/1.1
+Content-Type: application/json
+
+{
+    "bookID": "5ef8aec18905634e6ae21d5a",
+    "customerID": "5ef921cb18483e58451a5718",
+    "duration": 1
+}
+
+### get all books
+GET http://localhost:4545/books
+Content-Type: application/json
+
+### get all customers
+GET http://localhost:5555/customers
+Content-Type: application/json
+
+### get a customers
+GET http://localhost:5555/customer/5ef921cb18483e58451a5718
+Content-Type: application/json
+
+### get all order
+GET http://localhost:6565/orders
+Content-Type: application/json
+
+### get an order
+GET http://localhost:6565/order/5ef9334f22b1265ad25d0494
+Content-Type: application/json
+
+###
+GET http://127.0.0.1:3000/api/products
+Content-Type: application/json
+
+###
+GET http://127.0.0.1:3000/api/products/5ef921cb18483e58451a5718
+Content-Type: application/json

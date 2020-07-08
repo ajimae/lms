@@ -22,6 +22,7 @@ function send(message) {
 }
 
 function recieve(ctx) {
+  console.log(ctx.data, 'OOOOO')
   // connect and create a channel and listen through the it
   amp.connect('amqp://127.0.0.1', function (error, connection) {
     if (error) throw Error(error);
@@ -41,8 +42,9 @@ function recieve(ctx) {
         return ctx.res.status(200).json({
           message: 'fetched successfully',
           data: {
-            order: ctx.order,
+            order: ctx.data.order,
             book: data,
+            customer: ctx.data.customer,
           }
         });
       }, { noAck: true });

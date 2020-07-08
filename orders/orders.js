@@ -76,14 +76,16 @@ app.get('/order/:id', function (req, res) {
     }
     // here we include our gRPC or RabbitMQ message here
     // send out book and custom ids
+    await send(result)
     // console.log('this...')
     // recieve book and customer details
     // for(var i = 0; i < 1000; i++) {}
 
     const customer = await getCustomer(result.customerID);
     // watch for change in queue
-    console.log(customer, 'POPOPOP')
-    return recieve({ res, data: { order: result, customer } });
+    // console.log(customer, 'POPOPOP')
+    await recieve({ res, data: { order: result, customer } });
+    return true
     // return consume({res, status: 200, msg: 'fetched successully'});
     // return res.status(200).json({ success: true, message: 'fetched successully', data: result });
   });
