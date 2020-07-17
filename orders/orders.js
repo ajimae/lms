@@ -65,7 +65,7 @@ app.get('/orders', function (_, res) {
 });
 
 // get a single order
-app.get('/order/:id', function (req, res) {
+app.get('/order/:id', function (req, res, next) {
   Order.findOne({ _id: req.params.id }, async function (error, result) {
     if (error) {
       return res.status(500).json({
@@ -84,10 +84,11 @@ app.get('/order/:id', function (req, res) {
     const customer = await getCustomer(result.customerID);
     // watch for change in queue
     // console.log(customer, 'POPOPOP')
-    await recieve({ res, data: { order: result, customer } });
-    return true
+    recieve({ res, data: { order: result, customer } });
+    // return true
     // return consume({res, status: 200, msg: 'fetched successully'});
     // return res.status(200).json({ success: true, message: 'fetched successully', data: result });
+    // return next();
   });
 });
 

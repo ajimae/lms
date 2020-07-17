@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { elasticClient } = require('./clients/elasticClient');
 
-const { connectDB } = require('./db/database');
+const Database = require('./db/database');
 const { Customer } = require('./model/Customer');
 
 const app = express();
@@ -10,15 +10,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// connect to database
-connectDB().then(function (db) {
-  console.log('connected to database');
-});
+const url = "mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/customer?replicaSet=spike";
+const db = new Database(url)
+db.connect();
 
 app.get('/', function (req, res) {
   res.status(200).json({ success: true, message: 'this is the customer service' });
 });
-
 
 // create customer
 app.post('/customer', function (req, res) {
