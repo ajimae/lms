@@ -1,4 +1,6 @@
 const amp = require('amqplib/callback_api');
+const amqp = require('amqplib')
+const Response = require('../../response');
 
 function send(message) {
   // connect and create channel
@@ -21,35 +23,40 @@ function send(message) {
   });
 }
 
-function recieve(ctx) {
-  console.log(ctx.data, 'OOOOO')
-  // connect and create a channel and listen through the it
-  amp.connect('amqp://127.0.0.1', function (error, connection) {
-    if (error) throw Error(error);
-    connection.createChannel(function (error, channel) {
-      if (error) throw Error(error);
-      var queue = 'response';
+async function recieve(ctx) {
+  const conn = await amqp.connect('amqp://localhost?heartbeat=5s')
+  const ch = await conn.createChannel()
 
-      channel.assertQueue(queue, { durable: false });
-      console.log(`waiting for message in ${queue}`);
+  const queueName = 'response'
+  const message = 'message'
 
-      // consume message from queue
-      return channel.consume(queue, function (message) {
-        console.log(`Received ${message.content.toString()}`);
-        // parse message content to json response
-        let msgBody = message.content.toString();
-        let data = JSON.parse(msgBody);
-        return ctx.res.status(200).json({
-          message: 'fetched successfully',
-          data: {
-            order: ctx.data.order,
-            book: data,
-            customer: ctx.data.customer,
-          }
-        });
-      }, { noAck: true });
-    });
-  });
+  await ch.assertQueue(queueName, { durable: false })
+  // Publish
+  // await ch.sendToQueue(queueName, Buffer.from(msg, 'utf8'))
+  // subscribe
+  // await ch.consume(queueName, msg => {
+  //   if (msg !== null) {
+  //     // oopsEmitter.emit('event', msg.content.toString())
+  //     // ch.ack(msg)
+  //     console.log(msg, '>>>>>')
+  //   }
+  // })
+
+  let m
+  await ch.consume(queueName, function (message) {
+    if (message !== null) {
+      m = message.content.toString()
+    }
+  })
+
+  console.log(JSON.parse(m), '<><>>><<<>');
+  const data = {
+    order: ctx.data.order,
+    book: JSON.parse(m),
+    customer: ctx.data.customer
+  }
+  const response = new Response(ctx.res, 200, 'fetched successfully', data)
+  return response.successResponse()
 }
 
 module.exports = {

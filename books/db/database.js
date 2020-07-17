@@ -1,19 +1,22 @@
 var mongoose = require('mongoose');
 var config = require('config');
 
-// var dbOptions;
-// if (config.dbOptions.indexOf('replicaSet') > -1) {
-// 	dbOptions = config.dbOptions
-// }
+const dbUrl = config.mongo.db + "://" + config.mongo.host + ":" + config.mongo.port1 + "," + config.mongo.host + ":" + config.mongo.port2 + "," + config.mongo.host + ":" + config.mongo.port3 + "/" + config.mongo.database + "?replicaSet=" + config.mongo.replSetName;
 
-var connectDB = () => {
-  var url = config.mongo.db + "://" + config.mongo.host + ":" + config.mongo.port1 + "," + config.mongo.host + ":" + config.mongo.port2 + "," + config.mongo.host + ":" + config.mongo.port3 + "/" + config.mongo.database + "?replicaSet=" + config.mongo.replSetName;
+class Databse {
+  constructor(url = dbUrl, instance = mongoose, option = { useUnifiedTopology: true, useNewUrlParser: true }) {
+    this.url = url;
+    this.instance = instance;
+    this.option = option;
+  }
 
-  // var url = "mongodb://127.0.0.1:27017/workout";
-  console.log(url);
-  return mongoose.connect(url, config.dbOptions);
-};
+  connect() {
+    return this.instance.connect(this.url, this.option);
+  }
 
-module.exports = {
-  connectDB
-};
+  disconnect() {
+    return this.instance.disconnect();
+  }
+}
+
+module.exports = Databse;

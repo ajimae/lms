@@ -52,15 +52,30 @@
 // main()
 
 const path = require('path')
-const hl = require('highland')
+// const hl = require('highland')
 const Mali = require('mali')
+const Database = require('../../db/database');
 // const grpc = require('grpc')
 
 // const createError = require('create-grpc-error')
 // const apikey = require('mali-apikey')
 // const logger = require('mali-logger')
 const toJSON = require('@malijs/tojson')
-const User = require('./user')
+const User = require('./user');
+const mongoose = require('mongoose');
+
+// connect to database
+// connectDB().then(function (db) {
+//   console.log('gRPC server connected to database');
+// });
+
+// const url = 'mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/customer?replicaSet=spike';
+// const db = new Database(url);
+// db.connect();
+
+const url = 'mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/customer?replicaSet=spike';
+const db = new Database(url, mongoose);
+db.connect();
 
 const PROTO_PATH = path.resolve(__dirname, 'proto/customer.proto')
 const HOSTPORT = '0.0.0.0:50051'
@@ -71,7 +86,6 @@ let app
 
 async function getUser(ctx, next) {
   const user = await User.findById(ctx.req.id)
-  console.log(user, '<--<><<<');
   ctx.res = user
   next()
 }
@@ -112,7 +126,7 @@ function main() {
   console.log(`User service running @ ${HOSTPORT}`)
 }
 
-async function shutdown (err) {
+async function shutdown(err) {
   if (err) console.error(err)
   await app.close()
   process.exit()

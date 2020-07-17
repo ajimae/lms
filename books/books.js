@@ -1,21 +1,22 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { elasticClient } = require('./clients/elasticClient');
 
-const { connectDB } = require('./db/database');
+const { elasticClient } = require('./clients/elasticClient');
+const Database = require('./db/database');
 const { Book } = require('./model/Book');
 const { recieve } = require('./messaging/queue');
 
 const app = express();
+const database = new Database();
 
+// watch rabbitmq queue
 recieve();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // connect to database
-connectDB().then(function (db) {
-  console.log('connected to database');
-});
+database.connect();
 
 app.get('/', function (req, res) {
   res.status(200).json({ success: true, message: 'this is the books service' });
@@ -92,7 +93,7 @@ app.get('/books/search', function (req, res, next) {
       // var data = results.body.hits.hits.map(function (hit) {
       //   return hit;
       // });
-      
+
       const data = results.body.hits.hits.map(hit => hit);
 
       return res.status(200).json({

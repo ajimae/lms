@@ -1,16 +1,16 @@
-var mongoose = require('mongoose');
-var config = require('config');
+// var mongoose = require('mongoose');
+// var config = require('config');
 
 // // var dbOptions;
 // // if (config.dbOptions.indexOf('replicaSet') > -1) {
 // // 	dbOptions = config.dbOptions
 // // }
 
-// var connectDB = (url = '') => {
+// var connectDB = () => {
 //   // var url = config.mongo.db + "://" + config.mongo.host + ":" + config.mongo.port1 + "," + config.mongo.host + ":" + config.mongo.port2 + "," + config.mongo.host + ":" + config.mongo.port3 + "/" + config.mongo.database + "?replicaSet=" + config.mongo.replSetName;
 
-//   if(url == '')
-//     url = "mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/customer?replicaSet=spike";
+//   // var url = "mongodb://127.0.0.1:27017/workout";
+//   const url = "mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019/customer?replicaSet=spike";
 //   console.log(url);
 //   return mongoose.connect(url, config.dbOptions);
 // };
@@ -18,6 +18,9 @@ var config = require('config');
 // module.exports = {
 //   connectDB
 // };
+
+var mongoose = require('mongoose');
+var config = require('config');
 
 const dbUrl = config.mongo.db + "://" + config.mongo.host + ":" + config.mongo.port1 + "," + config.mongo.host + ":" + config.mongo.port2 + "," + config.mongo.host + ":" + config.mongo.port3 + "/" + config.mongo.database + "?replicaSet=" + config.mongo.replSetName;
 
