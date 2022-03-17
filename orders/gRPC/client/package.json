@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@grpc/proto-loader": "^0.3.0",
-    "grpc": "^1.24.3",
+    "grpc": "^1.24.11",
     "grpc-caller": "^0.13.0",
     "uuid": "^3.4.0"
   }
